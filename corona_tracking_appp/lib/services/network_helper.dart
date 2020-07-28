@@ -5,10 +5,11 @@ import 'package:corona_tracking_appp/models/allcountries_data_model.dart';
 import 'package:corona_tracking_appp/models/nepal_data_model.dart';
 import 'package:corona_tracking_appp/models/worldwide_data_model.dart';
 
+const url = 'https://api.thevirustracker.com/free-api';
+
 class NetworkHelper {
   Future<dynamic> getWorldWideData() async {
-    final response =
-        await get('https://api.thevirustracker.com/free-api?global=stats');
+    final response = await get('$url?global=stats');
     final data = jsonDecode(response.body);
     print(data);
 
@@ -16,24 +17,21 @@ class NetworkHelper {
   }
 
   getNepalData() async {
-    final response =
-        await get('https://api.thevirustracker.com/free-api?countryTotal=NP');
+    final response = await get('$url?countryTotal=NP');
     final data = jsonDecode(response.body);
 
     return NepalDataModel.fromJson(data);
   }
 
   getKuwaitData() async {
-    final response =
-        await get('https://api.thevirustracker.com/free-api?countryTotal=KW');
+    final response = await get('$url?countryTotal=KW');
     final data = jsonDecode(response.body);
 
     return KuwaitDataModel.fromJson(data);
   }
 
   getAllCountriesData() async {
-    final response =
-        await get('https://api.thevirustracker.com/free-api?countryTotals=ALL');
+    final response = await get('$url?countryTotals=ALL');
     final data = jsonDecode(response.body);
 
     return AllCountriesDataModel.fromJson(data);
