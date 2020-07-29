@@ -1,128 +1,209 @@
+import 'package:corona_tracking_appp/services/update_method.dart';
 import 'package:corona_tracking_appp/widgets/button.dart';
 import 'package:corona_tracking_appp/widgets/data_card.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'home_page.dart';
 import '../constants.dart';
 
-class NepalData extends StatefulWidget {
+class NepalData extends StatelessWidget {
   final nepalData;
   NepalData({this.nepalData});
+  // int _infectedData;
+  // int _deathData;
+  // int _recoveredData;
+  // int _seriousCases;
+  // int _newCases;
+  // int _newDeaths;
 
-  @override
-  _NepalDataState createState() => _NepalDataState();
-}
+  // updateNepalData(dynamic nepalData) {
+  //   setState(() {
+  //     if (nepalData == null) {
+  //       _infectedData = 0;
+  //       _deathData = 0;
+  //       _recoveredData = 0;
+  //       _seriousCases = 0;
+  //       _newCases = 0;
+  //       _newDeaths = 0;
+  //     }
 
-class _NepalDataState extends State<NepalData> {
-  int _infectedData;
-  int _deathData;
-  int _recoveredData;
-  int _seriousCases;
-  int _newCases;
-  int _newDeaths;
+  //     _infectedData = nepalData[0].totalInfected;
+  //     _deathData = nepalData[0].totalDeath;
+  //     _recoveredData = nepalData[0].totalRecovered;
+  //     _seriousCases = nepalData[0].seriousCases;
+  //     _newCases = nepalData[0].newCases;
+  //     _newDeaths = nepalData[0].newDeaths;
+  //   });
+  // }
 
-  updateData(dynamic nepalData) {
-    setState(() {
-      if (nepalData == null) {
-        _infectedData = 0;
-        _deathData = 0;
-        _recoveredData = 0;
-        _seriousCases = 0;
-        _newCases = 0;
-        _newDeaths = 0;
-      }
-
-      _infectedData = nepalData[0].totalInfected;
-      _deathData = nepalData[0].totalDeath;
-      _recoveredData = nepalData[0].totalRecovered;
-      _seriousCases = nepalData[0].seriousCases;
-      _newCases = nepalData[0].newCases;
-      _newDeaths = nepalData[0].newDeaths;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    updateData(widget.nepalData);
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   updateNepalData(widget.nepalData);
+  // }
 
   RegExp reg = new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
   Function mathFunc = (Match match) => '${match[1]},';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'NEPAL CORONA DATA',
-                      style: kHeadingTextStyle,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {},
-                    ),
-                  ],
+    return WrapperPage(
+      onInit: Provider.of<UpdateMethod>(context).updateNepalData(nepalData),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'NEPAL CORONA DATA',
+                        style: kHeadingTextStyle,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              DataCard(
-                title: 'Infected:',
-                data: _infectedData.toString().replaceAllMapped(reg, mathFunc),
-                colour: kInfectedColor,
-              ),
-              DataCard(
-                title: 'Death:',
-                data: _deathData.toString().replaceAllMapped(reg, mathFunc),
-                colour: kDeathColor,
-              ),
-              DataCard(
-                title: 'Recovered:',
-                data: _recoveredData.toString().replaceAllMapped(reg, mathFunc),
-                colour: kRecoveredColor,
-              ),
-              DataCard(
-                title: 'Serious Cases:',
-                data: _seriousCases.toString().replaceAllMapped(reg, mathFunc),
-                colour: kSeriousCases,
-              ),
-              DataCard(
-                title: 'Today New Cases:',
-                data:
-                    "+${_newCases.toString().replaceAllMapped(reg, mathFunc)}",
-                colour: kInfectedColor,
-              ),
-              DataCard(
-                title: 'Today New Deaths:',
-                data:
-                    "+${_newDeaths.toString().replaceAllMapped(reg, mathFunc)}",
-                colour: kDeathColor,
-              ),
-              SizedBox(height: 20.0),
-              CountryButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                text: 'WORLDWIDE',
-              ),
-            ],
+                DataCard(
+                  title: 'Infected:',
+                  data: Provider.of<UpdateMethod>(context)
+                      .infectedData
+                      .toString()
+                      .replaceAllMapped(reg, mathFunc),
+                  colour: kInfectedColor,
+                ),
+                DataCard(
+                  title: 'Death:',
+                  data: Provider.of<UpdateMethod>(context)
+                      .deathData
+                      .toString()
+                      .replaceAllMapped(reg, mathFunc),
+                  colour: kDeathColor,
+                ),
+                DataCard(
+                  title: 'Recovered:',
+                  data: Provider.of<UpdateMethod>(context)
+                      .recoveredData
+                      .toString()
+                      .replaceAllMapped(reg, mathFunc),
+                  colour: kRecoveredColor,
+                ),
+                DataCard(
+                  title: 'Serious Cases:',
+                  data: Provider.of<UpdateMethod>(context)
+                      .seriousCases
+                      .toString()
+                      .replaceAllMapped(reg, mathFunc),
+                  colour: kSeriousCases,
+                ),
+                DataCard(
+                  title: 'Today New Cases:',
+                  data:
+                      "+${Provider.of<UpdateMethod>(context).newCases.toString().replaceAllMapped(reg, mathFunc)}",
+                  colour: kInfectedColor,
+                ),
+                DataCard(
+                  title: 'Today New Deaths:',
+                  data:
+                      "+${Provider.of<UpdateMethod>(context).newDeaths.toString().replaceAllMapped(reg, mathFunc)}",
+                  colour: kDeathColor,
+                ),
+                SizedBox(height: 20.0),
+                CountryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  text: 'WORLDWIDE',
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+// Scaffold(
+//       body: SingleChildScrollView(
+//         physics: BouncingScrollPhysics(),
+//         child: Container(
+//           color: Theme.of(context).scaffoldBackgroundColor,
+//           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40.0),
+//           child: Column(
+//             children: <Widget>[
+//               Padding(
+//                 padding:
+//                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18.0),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: <Widget>[
+//                     Text(
+//                       'NEPAL CORONA DATA',
+//                       style: kHeadingTextStyle,
+//                     ),
+//                     IconButton(
+//                       icon: Icon(Icons.refresh),
+//                       onPressed: () {},
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               DataCard(
+//                 title: 'Infected:',
+//                 data: _infectedData.toString().replaceAllMapped(reg, mathFunc),
+//                 colour: kInfectedColor,
+//               ),
+//               DataCard(
+//                 title: 'Death:',
+//                 data: _deathData.toString().replaceAllMapped(reg, mathFunc),
+//                 colour: kDeathColor,
+//               ),
+//               DataCard(
+//                 title: 'Recovered:',
+//                 data: _recoveredData.toString().replaceAllMapped(reg, mathFunc),
+//                 colour: kRecoveredColor,
+//               ),
+//               DataCard(
+//                 title: 'Serious Cases:',
+//                 data: _seriousCases.toString().replaceAllMapped(reg, mathFunc),
+//                 colour: kSeriousCases,
+//               ),
+//               DataCard(
+//                 title: 'Today New Cases:',
+//                 data:
+//                     "+${_newCases.toString().replaceAllMapped(reg, mathFunc)}",
+//                 colour: kInfectedColor,
+//               ),
+//               DataCard(
+//                 title: 'Today New Deaths:',
+//                 data:
+//                     "+${_newDeaths.toString().replaceAllMapped(reg, mathFunc)}",
+//                 colour: kDeathColor,
+//               ),
+//               SizedBox(height: 20.0),
+//               CountryButton(
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                 },
+//                 text: 'WORLDWIDE',
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
 
 // appBar: AppBar(
 //   backgroundColor: Color(0xFFfff48f).withOpacity(0.9),

@@ -25,8 +25,8 @@ class _LoadingPageState extends State<LoadingPage> {
       print(worldWideData);
       print(_worldWide[0].seriousCases);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePage(
-          worldWideData: _worldWide,
+        return CoronaMeter(
+          data: _worldWide,
         );
       }));
     } catch (e) {
